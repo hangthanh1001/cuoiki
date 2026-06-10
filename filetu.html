@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FileTU - Kho tài liệu sinh viên FTU độc quyền</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        /* Lớp bảo vệ chống chụp màn hình và sao chép theo định hướng của báo cáo */
+        .secure-view { user-select: none; -webkit-user-select: none; }
+        @media print { body { display: none; } }
+    </style>
+</head>
+<body id="main-wrapper" class="text-slate-800">
+
+    <header class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <button aria-label="Toggle sidebar" class="p-2 text-slate-500 hover:bg-slate-100 rounded-full md:hidden">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <a href="#" class="flex items-center space-x-2">
+                    <div class="w-9 h-9 bg-red-600 rounded-lg flex items-center justify-between p-1.5 shadow-md">
+                        <span class="text-white font-bold text-xl leading-none">F</span>
+                        <span class="text-white font-bold text-xl leading-none">TU</span>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">FileTU</span>
+                </a>
+            </div>
+
+            <div class="hidden md:flex flex-1 max-w-xl mx-8">
+                <div class="relative w-full">
+                    <input type="text" placeholder="Tìm tài liệu theo môn học, giảng viên hoặc mã học phần (e.g. Design Thinking)..." 
+                           class="w-full bg-slate-100 pl-10 pr-4 py-2 rounded-full border border-transparent focus:bg-white focus:border-red-500 focus:outline-none transition-all text-sm">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button class="bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-700 flex items-center space-x-1 transition">
+                    <i class="fa-solid fa-microphone text-red-500"></i>
+                    <span>Ghi âm bài giảng</span>
+                </button>
+                
+                <div class="flex items-center bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full shadow-sm">
+                    <i class="fa-solid fa-coins text-amber-500 mr-1.5 text-sm"></i>
+                    <span id="user-points" class="font-bold text-sm text-amber-700">120 <span class="text-xs font-normal text-amber-600">điểm</span></span>
+                </div>
+
+                <div class="relative group cursor-pointer">
+                    <div class="w-9 h-9 bg-emerald-600 text-white font-semibold rounded-full flex items-center justify-center border-2 border-white shadow-sm ring-2 ring-emerald-500/20">
+                        HN
+                    </div>
+                    <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        <aside class="col-span-1 bg-white p-4 rounded-xl border border-slate-200 shadow-sm h-fit space-y-6">
+            <div>
+                <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-3">Phân loại học phần</h3>
+                <ul class="space-y-1 text-sm font-medium text-slate-600">
+                    <li><a href="#" class="flex items-center justify-between p-2 rounded-lg bg-red-50 text-red-600"><span class="flex items-center"><i class="fa-solid fa-graduation-cap mr-2.5 w-4 text-center"></i>Kinh tế Quốc tế</span><span class="bg-red-200 text-red-800 text-xs px-1.5 py-0.5 rounded-full font-bold">12</span></a></li>
+                    <li><a href="#" class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 transition"><span class="flex items-center"><i class="fa-solid fa-chart-line mr-2.5 w-4 text-center"></i>Quản trị Kinh doanh</span><span class="bg-slate-100 text-slate-600 text-xs px-1.5 py-0.5 rounded-full">8</span></a></li>
+                    <li><a href="#" class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 transition"><span class="flex items-center"><i class="fa-solid fa-building-columns mr-2.5 w-4 text-center"></i>Tài chính Ngân hàng</span><span class="bg-slate-100 text-slate-600 text-xs px-1.5 py-0.5 rounded-full">5</span></a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-3">Bộ lọc nâng cao</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Giảng viên đứng lớp</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs focus:ring-1 focus:ring-red-500 outline-none">
+                            <option>Tất cả giảng viên</option>
+                            <option>TS. Phạm Thị Mỹ Dung</option>
+                            <option>ThS. Nguyễn Văn A</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Năm học & Học kỳ</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs focus:ring-1 focus:ring-red-500 outline-none">
+                            <option>Năm học 2025 - 2026</option>
+                            <option>Năm học 2024 - 2025</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="openUploadModal()" class="w-full bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold text-sm py-2.5 px-4 rounded-xl shadow-md hover:opacity-90 transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Đóng góp tài liệu (+Điểm)</span>
+            </button>
+        </aside>
+
+        <main class="col-span-1 md:col-span-3 space-y-6">
+            
+            <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-6 rounded-2xl text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-md">
+                    <span class="bg-indigo-500/20 text-indigo-300 text-xs px-2.5 py-1 rounded-full border border-indigo-500/30 font-semibold uppercase tracking-wider">Độc quyền FTU</span>
+                    <h1 class="text-2xl font-bold mt-2">Xin chào, Thành viên FTU!</h1>
+                    <p class="text-slate-300 text-xs mt-1 leading-relaxed">Hệ thống đã đồng bộ hóa với dữ liệu lịch học **FTUGate**. Bạn có thể truy cập nhanh tài liệu khớp chính xác theo thời khóa biểu học phần tuần này.</p>
+                </div>
+                <div class="absolute right-6 bottom-0 top-0 hidden sm:flex items-center opacity-10 text-9xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-bold text-lg text-slate-800 flex items-center">
+                        <i class="fa-solid fa-circle-check text-emerald-500 mr-2 text-sm"></i> Tải nhiều & Đánh giá cao
+                    </h2>
+                    <span class="text-xs text-slate-400">Cập nhật học kỳ mới nhất</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase">PDF Report</span>
+                                <div class="flex items-center text-amber-500 text-xs font-semibold">
+                                    <i class="fa-solid fa-star mr-1"></i> 4.9 <span class="text-slate-400 font-normal ml-0.5">(63 vote)</span>
+                                </div>
+                            </div>
+                            <h3 onclick="viewDocument('DESIGN THINKING REPORT - FileTU Website', 'TS. Phạm Thị Mỹ Dung', '2025')" class="font-bold text-slate-800 text-sm hover:text-red-600 cursor-pointer transition line-clamp-2">
+                                DESIGN THINKING REPORT - FileTU Website (Full Midterm)
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1 flex flex-col space-y-0.5">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-slate-400"></i>GV: TS. Phạm Thị Mỹ Dung</span>
+                                <span><i class="fa-solid fa-users mr-1 text-slate-400"></i>Đóng góp: Nhóm 5 - Lớp PPHE107</span>
+                            </p>
+                        </div>
+                        <div class="border-t border-slate-100 pt-3 mt-3 flex items-center justify-between text-xs">
+                            <span class="text-slate-400"><i class="fa-solid fa-eye mr-1"></i> 1,240 lượt xem</span>
+                            <span class="font-bold text-amber-600 flex items-center bg-amber-50 px-2 py-1 rounded">
+                                <i class="fa-solid fa-coins mr-1"></i> 10 Điểm
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase">DOCX NOTE</span>
+                                <div class="flex items-center text-amber-500 text-xs font-semibold">
+                                    <i class="fa-solid fa-star mr-1"></i> 4.7 <span class="text-slate-400 font-normal ml-0.5">(18 vote)</span>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-sm hover:text-red-600 cursor-pointer transition line-clamp-2">
+                                Tóm tắt lý thuyết Tiếng Anh Chuyên Ngành 4 - Thương mại quốc tế
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1 flex flex-col space-y-0.5">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-slate-400"></i>GV: Khoa Tiếng Anh Chuyên Ngành</span>
+                                <span><i class="fa-solid fa-user mr-1 text-slate-400"></i>Đóng góp: Minh Hạnh</span>
+                            </p>
+                        </div>
+                        <div class="border-t border-slate-100 pt-3 mt-3 flex items-center justify-between text-xs">
+                            <span class="text-slate-400"><i class="fa-solid fa-eye mr-1"></i> 856 lượt xem</span>
+                            <span class="font-bold text-emerald-600 flex items-center bg-emerald-50 px-2 py-1 rounded">
+                                Miễn phí
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="secure-document-viewer" class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+                <div class="flex flex-wrap items-center justify-between border-b border-slate-100 pb-4 gap-2">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">SECURE VIEW</span>
+                            <h2 id="view-title" class="font-bold text-base text-slate-800">DESIGN THINKING REPORT - FileTU Website</h2>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Giảng viên: <span id="view-instructor" class="text-slate-600 font-medium">TS. Phạm Thị Mỹ Dung</span> • Năm: <span id="view-year" class="text-slate-600 font-medium">2025</span></p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-lock text-red-500 mr-1"></i> Đã kích hoạt chặn Download/Screenshot</span>
+                    </div>
+                </div>
+
+                <div class="secure-view bg-slate-900 text-slate-300 p-6 rounded-xl font-mono text-xs leading-relaxed max-h-96 overflow-y-auto border border-slate-800 shadow-inner">
+                    <p class="text-slate-500 text-center mb-4 select-none">--- PAGE 1 ---</p>
+                    <p class="text-amber-400 font-bold mb-2 text-center">[ CỔNG TRƯỜNG ĐẠI HỌC NGOẠI THƯƠNG - KHOA KINH TẾ QUỐC TẾ ]</p>
+                    <p class="text-slate-400 mb-4 text-center">----------------------------------------------------</p>
+                    <p class="text-white font-bold text-sm mb-4">Môn học: Design Thinking (Mã lớp: PPHE107)</p>
+                    <p class="mb-2"><span class="text-emerald-400">Thành viên thực hiện đề tài:</span></p>
+                    <ol class="list-decimal pl-6 space-y-1 mb-6 text-slate-300">
+                        <li>Ngô Quỳnh Hương (15.6% Contribution)</li>
+                        <li>Tô Thảo Phương (14.9% Contribution)</li>
+                        <li>Nguyễn Trang Linh (15.6% Contribution)</li>
+                        <li>Hoàng Anh Tuấn (12.9% Contribution)</li>
+                        <li>Tạ Hoàng Nam (14.7% Contribution)</li>
+                        <li>Bùi Hữu Minh Hạnh (13.6% Contribution)</li>
+                        <li>Nguyễn Vũ Tố Uyên (12.7% Contribution)</li>
+                    </ol>
+                    <p class="text-slate-500 text-center mb-4 select-none">--- PAGE 2 (Nội dung nghiên cứu chuyên sâu) ---</p>
+                    <p class="text-yellow-500 font-semibold mb-2">I. Empathy & Define - Design the right thing</p>
+                    <p class="mb-4">**1. Hoạt động Town Watching:** Đội ngũ dự án tiến hành quan sát môi trường học tập thực tế tại FTU qua Group Facebook, Messenger nhóm, phòng tự học thư viện. Phát hiện lớn nhất: Tài liệu bị chia sẻ phân mảnh rải rác qua các link Drive cá nhân dễ bị dính lỗi mất quyền truy cập "Request Permission" ngay sát giờ thi gây căng thẳng cực độ cho sinh viên...</p>
+                    <p class="mb-4">**2. Kết quả phỏng vấn chuyên sâu:** Thu thập từ 63 mẫu khảo sát. Sinh viên đồng thuận rất cao phương án sử dụng hệ thống TÍCH ĐIỂM (Point-based system) thay vì dùng tiền mặt để mở khóa tài liệu cao cấp để tăng độ công bằng và thúc đẩy động lực cống hiến cho cộng đồng học thuật...</p>
+                    <p class="text-slate-500 text-center select-none">--- HẾT PHẦN XEM TRƯỚC BẢO MẬT ---</p>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <div class="flex items-center space-x-4">
+                        <button onclick="likeDoc()" class="text-xs font-semibold text-slate-500 hover:text-red-600 transition flex items-center space-x-1.5">
+                            <i id="like-icon" class="fa-regular fa-thumbs-up text-sm"></i>
+                            <span>Hữu ích (<span id="like-count">42</span>)</span>
+                        </button>
+                        <button class="text-xs font-semibold text-slate-500 hover:text-blue-600 transition flex items-center space-x-1.5">
+                            <i class="fa-regular fa-comment text-sm"></i>
+                            <span>Bình luận ẩn danh (12)</span>
+                        </button>
+                    </div>
+                    <span class="text-[11px] text-slate-400 italic">Bản quyền thuộc về Giảng viên & Nhóm tác giả FTU</span>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="upload-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
+            <button onclick="closeUploadModal()" class="absolute right-4 top-4 p-1.5 text-slate-400 hover:bg-slate-100 rounded-full transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <h3 class="font-bold text-lg text-slate-800 flex items-center mb-2">
+                <i class="fa-solid fa-upload text-red-600 mr-2"></i> Đóng góp tài liệu mới
+            </h3>
+            <p class="text-xs text-slate-500 mb-4 leading-relaxed">Tài liệu của bạn sẽ được kiểm duyệt thông tin về học phần và giảng viên trước khi xuất bản để đảm bảo tính xác thực cao nhất.</p>
+
+            <form onsubmit="handleUploadSubmit(event)" class="space-y-4 text-sm">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Tên tài liệu / Học phần</label>
+                    <input type="text" required placeholder="Ví dụ: Đề cương Kinh tế chính trị giảng viên X" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:border-red-500 focus:outline-none transition-all">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Giảng viên phụ trách</label>
+                        <input type="text" placeholder="Tên thầy / cô..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:border-red-500 focus:outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Điểm yêu cầu (0 - 50)</label>
+                        <input type="number" max="50" min="0" placeholder="0 = Miễn phí" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:border-red-500 focus:outline-none transition-all">
+                    </div>
+                </div>
+                
+                <div class="border-2 border-dashed border-slate-200 hover:border-red-400 rounded-xl p-6 text-center cursor-pointer bg-slate-50 transition group">
+                    <i class="fa-solid fa-file-pdf text-3xl text-slate-300 group-hover:text-red-500 transition mb-2"></i>
+                    <p class="text-xs font-medium text-slate-600">Kéo thả file PDF, DOCX hoặc hình ảnh bài ghi tại đây</p>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Dung lượng tối đa: 25MB</p>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" required id="copyright-confirm" class="accent-red-600 rounded">
+                    <label for="copyright-confirm" class="text-[11px] text-slate-500 leading-tight">Tôi cam kết tài liệu này không vi phạm quy định bảo mật đề thi của nhà trường và thuộc quyền sở hữu/chia sẻ hợp pháp của tôi.</label>
+                </div>
+
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl shadow transition mt-2">
+                    Xác nhận tải lên hệ thống kiểm duyệt
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-1">
+            <p class="font-semibold text-slate-600">FileTU App - Nền tảng tư duy thiết kế vì cộng đồng FTU sinh viên</p>
+            <p>Phát triển bởi Nhóm 5 • Giảng viên hướng dẫn: TS. Phạm Thị Mỹ Dung</p>
+        </div>
+    </footer>
+
+    <script>
+        // Xử lý mở/đóng Modal Upload đóng góp tài liệu
+        function openUploadModal() {
+            document.getElementById('upload-modal').classList.remove('hidden');
+        }
+        function closeUploadModal() {
+            document.getElementById('upload-modal').classList.add('hidden');
+        }
+
+        // Xử lý nộp tài liệu mới đóng góp
+        function handleUploadSubmit(e) {
+            e.preventDefault();
+            alert('Tải lên thành công! Hệ thống kiểm định FileTU đang xác minh cấu trúc và nguồn gốc học phần của file. Bạn sẽ nhận được điểm thưởng sau khi được phê duyệt.');
+            closeUploadModal();
+            
+            // Cộng điểm thưởng tượng trưng cho Intrinsic/Transactional Motivation
+            let pointsEl = document.getElementById('user-points');
+            pointsEl.innerHTML = "140 <span class='text-xs font-normal text-amber-600'>điểm (Đã cộng +20)</span>";
+        }
+
+        // Thay đổi tương tác nội dung động khi click xem tài liệu khác
+        function viewDocument(title, instructor, year) {
+            document.getElementById('view-title').innerText = title;
+            document.getElementById('view-instructor').innerText = instructor;
+            document.getElementById('view-year').innerText = year;
+            
+            // Scroll mượt mà đến khu vực trình đọc tài liệu bảo mật
+            document.getElementById('secure-document-viewer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Tương tác nút Like hữu ích tài liệu
+        let liked = false;
+        function likeDoc() {
+            let countEl = document.getElementById('like-count');
+            let iconEl = document.getElementById('like-icon');
+            let currentCount = parseInt(countEl.innerText);
+            
+            if(!liked) {
+                countEl.innerText = currentCount + 1;
+                iconEl.className = "fa-solid fa-thumbs-up text-sm text-red-500";
+                liked = true;
+            } else {
+                countEl.innerText = currentCount - 1;
+                iconEl.className = "fa-regular fa-thumbs-up text-sm";
+                liked = false;
+            }
+        }
+
+        // Tính năng nâng cao: Ngăn chặn phím tắt chụp màn hình / Snipping tool cơ bản trên trình duyệt
+        document.addEventListener('keyup', (e) => {
+            if (e.key == 'PrintScreen') {
+                navigator.clipboard.writeText('');
+                alert('Vì lý do bảo mật bản quyền tài liệu học thuật của Giảng viên FTU, tính năng chụp ảnh màn hình trực tiếp bị hạn chế trên FileTU.');
+            }
+        });
+    </script>
+</body>
+</html>
